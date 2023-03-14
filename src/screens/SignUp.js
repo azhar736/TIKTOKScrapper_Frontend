@@ -1,18 +1,30 @@
+import axios from "axios";
 import React, { useState } from "react";
 import PrimaryButton from "../components/PrimaryButton";
-
+const BASE_URL = "http://localhost:9000/";
 function SignUp() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const senRequest = async (fullName, email, password, confirmPassword) => {
+    try {
+      const response = await axios.post(`${BASE_URL}register`, {
+        fullName,
+        email,
+        password,
+        confirmPassword,
+      });
+      const data1 = await response.data;
+      console.log("The data from the API", data1);
+    } catch (error) {
+      console.log("error", error.message);
+    }
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(fullName);
-    console.log(email);
-    console.log(password);
-    console.log(confirmPassword);
+    senRequest(fullName, email, password, confirmPassword);
   };
   return (
     <>
