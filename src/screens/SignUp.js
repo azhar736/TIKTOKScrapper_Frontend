@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import React, { useState } from "react";
 import PrimaryButton from "../components/PrimaryButton";
@@ -7,7 +8,7 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const navigate = useNavigate();
   const senRequest = async (fullName, email, password, confirmPassword) => {
     try {
       const response = await axios.post(`${BASE_URL}register`, {
@@ -81,31 +82,25 @@ function SignUp() {
               />
             </div>
           </form>
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center my-5">
             <div className="flex justify-between items-center w-[70%] px-3">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  name=""
-                  id=""
-                  className="mr-2 border-2 border-secondaryColor rounded-sm"
-                />
-                <p>Remeber Me</p>
-              </div>
-              <div>
-                <p>Forgot Password?</p>
-              </div>
+              <PrimaryButton
+                title="SignUP"
+                custom="bg-[#409FFF]"
+                action={handleSubmit}
+              />
             </div>
           </div>
-          <div className="flex items-center justify-center my-5">
-            <PrimaryButton
-              title="SignUP"
-              custom="bg-[#409FFF]"
-              action={handleSubmit}
-            />
-          </div>
           <div className="flex items-center justify-center">
-            <p>Don't have an account? Sign Up</p>
+            <p>
+              Already have an account?{" "}
+              <span
+                className="cursor-pointer"
+                onClick={() => navigate("/login")}
+              >
+                SignIn
+              </span>
+            </p>
           </div>
         </div>
       </div>

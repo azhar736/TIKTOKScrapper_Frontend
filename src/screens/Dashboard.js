@@ -1,6 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import LiveListView from "../components/LiveListView";
 
 function Dashboard() {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("Auth-Token");
+    navigate("/");
+  };
   return (
     <>
       <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -140,7 +146,12 @@ function Dashboard() {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span class="flex-1 ml-3 whitespace-nowrap">Sign out</span>
+                <span
+                  onClick={handleLogout}
+                  class="flex-1 ml-3 whitespace-nowrap"
+                >
+                  Sign out
+                </span>
               </a>
             </li>
           </ul>
