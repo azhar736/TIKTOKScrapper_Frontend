@@ -1,16 +1,41 @@
 import axios from "axios";
 import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../components/PrimaryButton";
 const BASE_URL = "http://localhost:9000/";
+const initialValues = {
+  email: "",
+  password: "",
+};
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required"),
+});
+
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: initialValues,
+      onSubmit: (values) => {
+        senRequest(values.email, values.password);
+      },
+      validationSchema: validationSchema,
+    });
 
   const senRequest = async (email, password) => {
     try {
-      const response = await axios.post(`${BASE_URL}login`, {
+      console.log(`${BASE_URL}login`);
+      const response = await axios.post(`http://localhost:9000/login`, {
         email,
         password,
       });
@@ -22,15 +47,9 @@ function SignIn() {
       console.log("error", error.message);
     }
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(email, password);
-    senRequest(email, password);
-  };
   return (
     <div className="bg-gray-200 flex items-center justify-center h-[100vh]">
-      <div className="h-[450px] w-[550px] bg-white rounded-md">
+      <div className="h-[500px] w-[550px] bg-white rounded-md">
         <div className="flex items-center justify-center mt-10 mb-8">
           <h1 className="text-[28px] font-medium leading-[42px]">
             SignIn To Your Account{" "}
@@ -44,10 +63,17 @@ function SignIn() {
             <input
               type="email"
               name="email"
-              onChange={(e) => setEmail(e.target.value)}
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
               className="w-[100%] px-3 focus:ring-0 decoration-0 outline-none border-none bg-[#E8EDF5] rounded-md py-[12px]"
             />
           </div>
+          {touched.email && errors.email && (
+            <div className="w-[70%]">
+              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+            </div>
+          )}
           <p className="text-left font-subHeading text-[18px] text-[#636363] font-semibold leading-[21px] mt-2 mr-[19rem]">
             Password
           </p>
@@ -55,10 +81,17 @@ function SignIn() {
             <input
               type="password"
               name="password"
-              onChange={(e) => setPassword(e.target.value)}
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
               className="w-[100%] px-3 focus:ring-0 decoration-0 outline-none border-none bg-[#E8EDF5] rounded-md py-[12px]"
             />
           </div>
+          {touched.password && errors.password && (
+            <div className="w-[70%]">
+              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+            </div>
+          )}
         </form>
         <div className="flex items-center justify-center">
           <div className="flex justify-between items-center w-[70%] px-3">

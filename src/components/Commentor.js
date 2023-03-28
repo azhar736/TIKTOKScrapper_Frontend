@@ -3,20 +3,20 @@ import PrimaryButton from "./PrimaryButton";
 import io from "socket.io-client";
 import axios from "axios";
 const BASE_URL = "http://localhost:9000/";
-function LiveListView() {
+function Commentor() {
   const [userName, setUserName] = useState("");
   const [userNameError, setUserNameError] = useState("");
   const [nickName, setNickName] = useState([]);
-  const [giftName, setGiftName] = useState([]);
+  const [comments, setComments] = useState([]);
   const socket = io.connect("http://localhost:9000");
 
-  socket.on("user", (data) => {
+  socket.on("nickname", (data) => {
     // console.log('The Nickname===', data)
     handleNewData(data);
   });
-  socket.on("giftname", (data) => {
+  socket.on("comment", (data) => {
     // console.log('The Comment === ', data)
-    handleGift(data);
+    handleComments(data);
   });
 
   // Function to handle new data
@@ -24,14 +24,14 @@ function LiveListView() {
     setNickName((prevData) => [...prevData, newData]);
   };
   // Function to handle new data
-  const handleGift = (newData) => {
-    setGiftName((prevData) => [...prevData, newData]);
+  const handleComments = (newData) => {
+    setComments((prevData) => [...prevData, newData]);
   };
   const copyArrayData = () => {
-    navigator.clipboard.writeText(JSON.stringify(giftName));
+    navigator.clipboard.writeText(JSON.stringify(comments));
   };
   const clearArrayData = () => {
-    setGiftName([]);
+    setComments([]);
   };
 
   const validateUserName = () => {
@@ -85,16 +85,16 @@ function LiveListView() {
       <div className="h-[470px] w-[550px] bg-white rounded-md my-10">
         <div className="flex items-center flex-col justify-center mt-10 mb-8">
           <h1 className="text-[28px] font-medium leading-[42px]">
-            Gifter List
+            Commenter List
           </h1>
-          <p>Total Users</p>
+          <p>Total Users : 3548</p>
         </div>
         <div className="mx-10 flex justify-between">
           <div className="w-[50%] flex items-center justify-center">
             <p>USERNAME</p>
           </div>
           <div className="w-[50%] flex items-center justify-center">
-            <p>Gift</p>
+            <p>TIME</p>
           </div>
         </div>
         <div className="h-[180px]">
@@ -109,7 +109,7 @@ function LiveListView() {
             <div className="w-[50%] h-[200px] pl-5 flex flex-col items-center justify-center overflow-y-scroll">
               {/*Right Col */}
               <ul>
-                {giftName.map((data, index) => (
+                {comments.map((data, index) => (
                   <li key={index}>{data}</li>
                 ))}
               </ul>
@@ -137,4 +137,4 @@ function LiveListView() {
   );
 }
 
-export default LiveListView;
+export default Commentor;

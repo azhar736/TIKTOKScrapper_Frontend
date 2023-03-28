@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import Commentor from "../components/Commentor";
 import LiveListView from "../components/LiveListView";
 
-function Dashboard() {
+function CommentorList() {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("Auth-Token");
@@ -111,7 +112,10 @@ function Dashboard() {
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
           <ul className="space-y-2">
             <li>
-              <a className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+              <a
+                onClick={() => navigate("/dashboard")}
+                className="flex items-center p-2 text-base font-normal cursor-pointer text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
                 <svg
                   aria-hidden="true"
                   className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -172,14 +176,13 @@ function Dashboard() {
           </ul>
         </div>
       </aside>
-
       <div className="p-4 mt-20 sm:ml-64">
         <div>
-          <LiveListView />
+          <Commentor />
         </div>
       </div>
     </>
   );
 }
 
-export default Dashboard;
+export default CommentorList;
